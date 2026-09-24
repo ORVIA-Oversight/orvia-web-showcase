@@ -1,1 +1,0 @@
-import MorrowClient from '../MorrowClient'\nexport default function Page(){return <MorrowClient/>}\n
