@@ -31,14 +31,18 @@ npm install
 npm run dev
 ```
 
+Open `http://localhost:3000`.
+
 ## Deployment
 
 Designed for Vercel with the production demonstration domain:
 
 `https://gallery.web.orvia.org.uk/`
 
-The site is intentionally `noindex, nofollow`.
+The site is intentionally `noindex, nofollow` and `/studio` is not intended for indexing.
 
 ## ORVIA Web
+
+This build demonstrates the proposition:
 
 **A beautiful artist website on the front. A practical business tool behind it.**
