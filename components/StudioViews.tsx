@@ -172,9 +172,11 @@ export function StudioArtwork({ id }: { id: string }) {
   if (!artwork) return <div className="studio-page"><h1>Artwork not found</h1><a href="/studio/work">RETURN TO MY WORK</a></div>;
   if (editMode) return <ArtworkEditor id={id} />;
   function mark(status: ArtworkStatus) {
-    if (status === "SOLD" && !window.confirm(`MARK ${artwork.title.toUpperCase()} AS SOLD?`)) return;
-    setState((current) => ({ ...current, artworks: current.artworks.map((item) => item.id === artwork.id ? { ...item, status, updatedAt: Date.now() } : item) }));
-    setAnnounce(`${artwork.title} marked ${status}. Public site updated.`);
+    const currentArtwork = state.artworks.find((item) => item.id === id);
+    if (!currentArtwork) return;
+    if (status === "SOLD" && !window.confirm(`MARK ${currentArtwork.title.toUpperCase()} AS SOLD?`)) return;
+    setState((current) => ({ ...current, artworks: current.artworks.map((item) => item.id === currentArtwork.id ? { ...item, status, updatedAt: Date.now() } : item) }));
+    setAnnounce(`${currentArtwork.title} marked ${status}. Public site updated.`);
   }
   return <div className="studio-page"><div className="studio-detail-layout"><div className="studio-detail-art"><ArtVisual artwork={artwork} /></div><div className="studio-detail-info"><p className="eyebrow">{collectionCopy[artwork.collection]?.name}</p><h1>{artwork.title}</h1><p>{artwork.medium}<br />{artwork.dimensions}<br />{artwork.year}</p><div className="studio-detail-price"><strong>{money(artwork.price)}</strong><Status status={artwork.status} /></div><p>{artwork.description}</p><div className="stack-actions"><button className="button dark" onClick={() => setEditMode(true)}>EDIT ARTWORK</button>{artwork.status !== "SOLD" && <button className="button outline" onClick={() => mark("SOLD")}>MARK SOLD</button>}{artwork.status !== "AVAILABLE" && <button className="button outline" onClick={() => mark("AVAILABLE")}>MARK AVAILABLE</button>}{artwork.status !== "RESERVED" && <button className="button outline" onClick={() => mark("RESERVED")}>MARK RESERVED</button>}<a className="text-link" href={`/work/${artwork.slug}`}>VIEW ON WEBSITE ↗</a></div></div></div></div>;
 }
