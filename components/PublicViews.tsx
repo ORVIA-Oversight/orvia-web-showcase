@@ -2,6 +2,7 @@
 
 import { FormEvent, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Image from "next/image";
 import { QRCodeSVG } from "qrcode.react";
 import ArtVisual from "./ArtVisual";
 import { Artwork, collectionCopy, money } from "../lib/demo";
@@ -61,7 +62,6 @@ function ArtworkMeta({ artwork, price = true }: { artwork: Artwork; price?: bool
 
 export function Home() {
   const { state } = useDemo();
-  const hero = state.artworks.find((a) => a.slug === "winter-edge") ?? state.artworks[0];
   const tidal = state.artworks.filter((a) => a.collection === "tidal").slice(0, 5);
   const available = state.artworks.filter((a) => a.status === "AVAILABLE").slice(0, 6);
 
@@ -77,9 +77,51 @@ export function Home() {
             <a className="text-link light-link" href="/collections">EXPLORE COLLECTIONS</a>
           </div>
         </div>
-        <a className="hero-art" href={`/work/${hero.slug}`} aria-label={`View ${hero.title}`}>
-          <ArtVisual artwork={hero} />
-        </a>
+        <div className="hero-art hero-photo">
+          <Image
+            src="/media/gallery/hero-studio.png"
+            alt="Artist working in a bright contemporary studio"
+            fill
+            priority
+            sizes="(max-width: 760px) 86vw, 48vw"
+          />
+          <span className="media-caption">MARA ELLISON STUDIO — FICTIONAL DEMONSTRATION</span>
+        </div>
+      </section>
+
+      <section className="artist-pro-intro" aria-labelledby="artist-pro-title">
+        <div>
+          <p className="eyebrow">ARTIST PRO DEMONSTRATION</p>
+          <h2 id="artist-pro-title">Public website.<br />Private studio tool.</h2>
+        </div>
+        <div className="artist-pro-copy">
+          <p>This demonstration shows how ORVIA Web can build more than a beautiful artist site. It can also include a private workspace to manage works, collections, availability, commissions and exhibitions — all designed to support professional practice without losing the artist’s visual identity.</p>
+          <div className="actions">
+            <a className="button dark" href="#studio-film">VIEW THE FILM</a>
+            <a className="button outline" href="https://web.orvia.org.uk/start?demo=artist-pro">ENQUIRE ABOUT A BUILD</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="studio-film" className="section studio-film-section">
+        <div className="section-heading split-heading">
+          <div><p className="eyebrow">STUDIO FILM</p><h2>Inside the artist’s world</h2></div>
+          <p>A short film showing how a premium ORVIA Web artist site can combine public presentation with a practical private studio tool.</p>
+        </div>
+        <div className="film-frame">
+          <video
+            className="studio-film"
+            src="/media/gallery/artist-pro-film.mp4"
+            poster="/media/gallery/artist-pro-film-poster.png"
+            autoPlay
+            muted
+            loop
+            playsInline
+            controls
+            preload="metadata"
+          />
+        </div>
+        <p className="film-caption">A demonstration film created to show the kind of artist presentation and studio workflow ORVIA Web can build.</p>
       </section>
 
       <section className="section current-collection">
@@ -98,6 +140,23 @@ export function Home() {
         <a className="button dark" href="/collections/tidal">EXPLORE TIDAL</a>
       </section>
 
+      <section className="studio-story-panel">
+        <div className="story-media">
+          <Image
+            src="/media/gallery/studio-in-progress.png"
+            alt="Artist working on a large landscape painting in the studio"
+            fill
+            sizes="(max-width: 760px) 100vw, 58vw"
+          />
+        </div>
+        <div className="story-copy">
+          <p className="eyebrow">THE PRACTICE</p>
+          <h2>The studio behind the work</h2>
+          <p>A calm, professional digital presence for artists who need both presentation and control — from exhibitions and commissions to collections and sales.</p>
+          <a className="text-link" href="/about">ABOUT THE STUDIO</a>
+        </div>
+      </section>
+
       <section className="section warm-section">
         <div className="section-heading"><p className="eyebrow">AVAILABLE WORK</p><h2>AVAILABLE NOW</h2></div>
         <div className="work-grid">
@@ -110,6 +169,32 @@ export function Home() {
           ))}
         </div>
         <a className="button dark" href="/work?status=available">VIEW ALL AVAILABLE WORK</a>
+      </section>
+
+      <section className="private-tool-story">
+        <div className="tool-story-copy">
+          <p className="eyebrow">PRIVATE STUDIO WORKSPACE</p>
+          <h2>A website that works behind the scenes too</h2>
+          <p>For artists who want more than a brochure site, ORVIA Web can also build a private web app or studio workspace — helping manage collections, sold works, commissions, exhibitions and public updates from one place.</p>
+          <div className="feature-points">
+            <span>Manage artwork and collections</span>
+            <span>Update sold / available status</span>
+            <span>Prepare exhibitions and releases</span>
+            <span>Present your work professionally from phone or desktop</span>
+          </div>
+          <div className="actions">
+            <a className="button light" href="/studio">OPEN MARA STUDIO</a>
+            <a className="text-link light-link" href="/portfolio">VIEW PORTFOLIO MODE</a>
+          </div>
+        </div>
+        <div className="tool-story-media">
+          <Image
+            src="/media/gallery/portfolio-studio.png"
+            alt="Artist workspace with paintings, laptop and portfolio tools"
+            fill
+            sizes="(max-width: 760px) 100vw, 48vw"
+          />
+        </div>
       </section>
 
       <SalesPanel />
@@ -320,25 +405,80 @@ export function CollectionPage({ slug }: { slug: string }) {
 
 export function About() {
   const { state } = useDemo();
-  const art = state.artworks[14];
-  return <section className="about-page"><div className="about-image"><ArtVisual artwork={art} /></div><div className="about-copy"><p className="eyebrow">ABOUT MARA</p><h1>THE WORK BEGINS OUTSIDE.</h1><p>{state.profile.longBio}</p><p>The studio process is slower: layers are added, erased and rebuilt until the image keeps the pressure of the weather without becoming a literal record of place.</p><p className="profile-note">Studio: {state.profile.studioLocation}<br />{state.profile.commissionAvailability}</p></div></section>;
+  return <section className="about-page">
+    <div className="about-image media-image">
+      <Image src="/media/gallery/studio-in-progress.png" alt="Artist working on a large landscape painting in the studio" fill sizes="(max-width: 760px) 100vw, 52vw" />
+    </div>
+    <div className="about-copy">
+      <p className="eyebrow">ABOUT MARA</p>
+      <h1>THE WORK BEGINS OUTSIDE.</h1>
+      <p>{state.profile.longBio}</p>
+      <p>The studio process is slower: layers are added, erased and rebuilt until the image keeps the pressure of the weather without becoming a literal record of place.</p>
+      <div className="about-callout"><strong>The studio behind the work</strong><span>A calm, professional digital presence for artists who need both presentation and control — from exhibitions and commissions to collections and sales.</span></div>
+      <p className="profile-note">Studio: {state.profile.studioLocation}<br />{state.profile.commissionAvailability}</p>
+    </div>
+  </section>;
 }
 
 export function PublicExhibitions() {
   const { state } = useDemo();
-  return <section className="section"><div className="catalogue-title"><p className="eyebrow">DATES</p><h1>EXHIBITIONS</h1><p>Demonstration exhibition information for the fictional Mara Ellison Studio.</p></div><div className="exhibition-list">{state.exhibitions.map((ex) => <article className="exhibition-public" key={ex.id}><div><p className="eyebrow">{ex.city}</p><h2>{ex.title}</h2><p>{ex.venue}</p></div><div><strong>{new Date(ex.openingDate).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}</strong><span>to</span><strong>{new Date(ex.closingDate).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}</strong></div><p>{ex.description}</p></article>)}</div><p className="fine-print">All exhibitions shown here are fictional demonstration content.</p></section>;
+  return <section className="section exhibitions-page">
+    <div className="exhibition-feature">
+      <div className="exhibition-feature-media">
+        <Image src="/media/gallery/studio-landscape.png" alt="Artist surrounded by a presented landscape collection" fill sizes="(max-width: 760px) 100vw, 56vw" />
+      </div>
+      <div className="exhibition-feature-copy">
+        <p className="eyebrow">EXHIBITIONS & EVENTS</p>
+        <h1>Exhibitions and presentation</h1>
+        <p>Show exhibitions, events and public presentation with the same level of quality as the work itself.</p>
+      </div>
+    </div>
+    <div className="catalogue-title"><p className="eyebrow">DATES</p><h2>UPCOMING</h2><p>Demonstration exhibition information for the fictional Mara Ellison Studio.</p></div>
+    <div className="exhibition-list">{state.exhibitions.map((ex) => <article className="exhibition-public" key={ex.id}><div><p className="eyebrow">{ex.city}</p><h2>{ex.title}</h2><p>{ex.venue}</p></div><div><strong>{new Date(ex.openingDate).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}</strong><span>to</span><strong>{new Date(ex.closingDate).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}</strong></div><p>{ex.description}</p></article>)}</div>
+    <p className="fine-print">All exhibitions shown here are fictional demonstration content.</p>
+  </section>;
 }
 
 export function Commissions() {
-  return <section className="commission-page editorial-dark"><div><p className="eyebrow">COMMISSIONS</p><h1>START WITH A PLACE,<br />A SCALE OR A MEMORY.</h1><p>A commission begins with a conversation about what matters: a landscape, a particular scale, a memory of weather or simply the atmosphere you want the work to hold.</p><div className="commission-steps"><span>01 CONVERSATION</span><span>02 DIRECTION</span><span>03 SIZE</span><span>04 TIMELINE</span><span>05 STUDIO PROCESS</span><span>06 DELIVERY</span></div><a className="button light" href="/contact">DISCUSS A COMMISSION</a></div></section>;
+  return <section className="commission-page editorial-dark">
+    <div className="commission-copy">
+      <p className="eyebrow">COMMISSIONS</p>
+      <h1>START WITH A PLACE,<br />A SCALE OR A MEMORY.</h1>
+      <p>Built to support private commissions, collector conversations and gallery introductions with a clearer, more professional journey.</p>
+      <div className="commission-steps"><span>01 CONVERSATION</span><span>02 DIRECTION</span><span>03 SIZE</span><span>04 TIMELINE</span><span>05 STUDIO PROCESS</span><span>06 DELIVERY</span></div>
+      <a className="button light" href="mailto:web@orvia.org.uk?subject=Artist%20Pro%20website%20enquiry">DISCUSS A COMMISSION</a>
+    </div>
+    <div className="commission-media">
+      <Image src="/media/gallery/consultation-atelier.png" alt="Consultation in a sunlit artist atelier" fill sizes="(max-width: 760px) 100vw, 46vw" />
+    </div>
+  </section>;
 }
 
 export function Contact() {
-  return <section className="section contact-page"><div><p className="eyebrow">CONTACT</p><h1>STUDIO ENQUIRIES</h1><p>For artwork, exhibition and commission enquiries, choose a work from the catalogue or use the demonstration contact route below.</p><p className="demo-warning">This is a fictional artist demonstration. No real artist receives messages.</p></div><div className="contact-card"><a className="button dark" href="/work?status=available">BROWSE AVAILABLE WORK</a><a className="button outline" href="/demo-information">DEMO INFORMATION</a></div></section>;
+  return <section className="section contact-page">
+    <div><p className="eyebrow">CONTACT</p><h1>STUDIO ENQUIRIES</h1><p>For artwork, exhibition and commission enquiries, choose a work from the catalogue or use the ORVIA Web project route below.</p><p className="demo-warning">This is a fictional artist demonstration. No real artist receives messages.</p></div>
+    <div className="contact-card">
+      <a className="button dark" href="https://web.orvia.org.uk/start?demo=artist-pro">START A PROJECT</a>
+      <a className="button outline" href="mailto:web@orvia.org.uk?subject=Artist%20Pro%20website%20enquiry">EMAIL WEB@ORVIA.ORG.UK</a>
+      <a className="text-link" href="/work?status=available">BROWSE AVAILABLE WORK</a>
+    </div>
+  </section>;
 }
 
 export function SalesPanel() {
-  return <section className="sales-panel"><div><p className="eyebrow">ORVIA WEB</p><h2>YOUR WEBSITE CAN DO MORE<br />THAN DISPLAY YOUR WORK.</h2><p>Mara Ellison Studio demonstrates how an artist website can combine public presentation with a private working tool behind it.</p><div className="sales-capabilities"><span>Add work.</span><span>Change prices.</span><span>Update availability.</span><span>Manage collections.</span><span>Share a live portfolio from your phone.</span></div><div className="actions"><a className="button light" href="https://web.orvia.org.uk/start?demo=artist-pro">BUILD SOMETHING LIKE THIS</a><a className="text-link light-link" href="https://web.orvia.org.uk/">VIEW ORVIA WEB</a></div></div><div className="sales-statement"><strong>YOUR PUBLIC WEBSITE IS WHAT PEOPLE SEE.</strong><strong>YOUR WEB APP IS WHAT HELPS YOU RUN IT.</strong></div></section>;
+  return <section className="sales-panel">
+    <div>
+      <p className="eyebrow">ORVIA WEB</p>
+      <h2>Want something like this<br />for your own work?</h2>
+      <p>Whether you need a beautifully presented artist website, a more advanced portfolio system or a connected private workspace, ORVIA Web can build it around the way you actually work.</p>
+      <div className="sales-capabilities"><span>Artist websites.</span><span>Portfolio systems.</span><span>Private studio tools.</span><span>Collections & availability.</span><span>Exhibitions & commissions.</span></div>
+      <div className="actions">
+        <a className="button light" href="https://web.orvia.org.uk/start?demo=artist-pro">START A PROJECT</a>
+        <a className="text-link light-link" href="mailto:web@orvia.org.uk?subject=Artist%20Pro%20website%20enquiry">TALK TO ORVIA WEB</a>
+      </div>
+    </div>
+    <div className="sales-statement"><strong>YOUR PUBLIC WEBSITE IS WHAT PEOPLE SEE.</strong><strong>YOUR WEB APP IS WHAT HELPS YOU RUN IT.</strong></div>
+  </section>;
 }
 
 export function DemoInformation() {
